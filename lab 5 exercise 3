@@ -1,5 +1,4 @@
 import java.text.DecimalFormat;
-
 class Cake{
    DecimalFormat df = new DecimalFormat("0.00");
    String name;
