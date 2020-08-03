@@ -102,7 +102,7 @@ class BlackForest extends Cake{
    }
 }
 
-public class TestCake1{
+public class Lab5_exercise3{
     public static void main(String args[]){
 
        Cake c = new BlackForest("BlackForest");
