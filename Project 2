@@ -1,0 +1,453 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;    
+
+public class MyOrderingSystem extends JPanel {
+  
+  CBBDrinkSelectIndexChanged cbbDrinkSelectIndexChanged;
+  CBBFoodSelectIndexChanged cbbFoodSelectIndexChanged;
+  CBBDessertSelectIndexChanged cbbDessertSelectIndexChanged;
+  ButtonCalculateClicked buttonCalculateClicked;
+  ButtonDoneClicked buttonDoneClicked;
+  ButtonNewOrderClicked buttonNewOrderClicked;
+  double drinkprice = 0;
+  double foodprice = 0;
+  double dessertprice = 0;
+  String drinkname = "Not Selected";
+  String foodname = "Not Selected";
+  String dessertname = "Not Selected";
+  String PaymentType = "Not Selected";
+  String DineInOrTakeAway = "Not Selected";
+  
+   // combobox
+    private JComboBox jcomboboxDrink;
+    private JComboBox jcomboboxFoods;
+    private JComboBox jcomboboxDessert;
+    
+   //label
+    private JLabel jlabelDrink;
+    private JLabel jlabelHeader;
+    private JLabel jlabelFood;
+    private JLabel jlabelDessert;
+    private JLabel jlabelSubtotal;
+    private JLabel jlabelPayment;
+    private JLabel jlabelOrder;
+    private JLabel jlabelRate;
+    private JLabel jlabelStatus;
+    private JLabel jlabelFeedback;
+    private JLabel jlabelPinNo;
+    private JLabel jlabelTotalPayment;
+
+  
+    //textField
+    private JTextField jtextfieldSubtotal;
+    private JTextField jtextfieldTotalPayment;
+
+  
+    //textArea
+    private JTextArea jtextareaOrder;
+    private JTextArea jtextareaFeedback;
+
+    //RadioButton
+    private JRadioButton jradiobuttonDineIn;
+    private JRadioButton jradiobuttonTakeAway;
+    
+    //Slider 
+    private JSlider jsliderRate;
+    
+    //PasswordField
+    private JPasswordField jpasswordfieldPinNo;
+    
+    //Button
+    private JButton jbuttonDone;
+    private JButton jbuttonCalculateTotal;
+    private JButton jbuttonNewOrder;
+
+    //RadioButton
+    private JRadioButton JradiobuttonCash;
+    private JRadioButton JradiobuttonCredit;
+  
+    // GroupRadioButton
+    private ButtonGroup groupTakeAwayOrDineIn;
+    private ButtonGroup groupCashOrCredit;
+
+
+    public MyOrderingSystem() {
+       
+        cbbDrinkSelectIndexChanged = new CBBDrinkSelectIndexChanged(this);
+        cbbFoodSelectIndexChanged = new CBBFoodSelectIndexChanged(this);
+        cbbDessertSelectIndexChanged = new CBBDessertSelectIndexChanged(this);
+        buttonCalculateClicked = new ButtonCalculateClicked(this);
+        buttonDoneClicked = new ButtonDoneClicked(this);
+        buttonNewOrderClicked = new ButtonNewOrderClicked(this);
+
+        
+        //construct preComponents
+        String[] jcomboboxDrinkItems = {"[Select]", "Iced Chocolate", "Iced Cappucino", "Iced Milk Tea"};
+        String[] jcomboboxFoodsItem = {"[Select]", "Spagetti", "Burger", "Fries"};
+        String[] jcomboboxDessertItems = {"[Select]", "Chocolate Cake", "Cheese Cake", "Ice Cream"};
+
+        //construct components
+        jcomboboxDrink = new JComboBox (jcomboboxDrinkItems);
+        jcomboboxFoods = new JComboBox (jcomboboxFoodsItem);
+        jcomboboxDessert = new JComboBox (jcomboboxDessertItems);
+      
+        jlabelDrink = new JLabel ("Drinks");
+        jlabelHeader = new JLabel ("Kor's Simple Cafe");
+        jlabelFood = new JLabel ("Foods");
+        jlabelDessert = new JLabel ("Dessert");
+        jlabelSubtotal = new JLabel ("Subtotal (RM):");
+        jlabelPayment = new JLabel ("Payment");
+        jlabelOrder = new JLabel ("Order");
+        jlabelRate = new JLabel ("Rate");
+        jlabelStatus = new JLabel ("Status");
+        jlabelFeedback = new JLabel ("Feedback");
+        jlabelPinNo = new JLabel ("Pin No");
+        jlabelTotalPayment = new JLabel ("Total Payment (RM):");
+        
+        jtextfieldSubtotal = new JTextField (5);
+        jtextfieldTotalPayment = new JTextField (5);
+                   
+        jtextareaOrder = new JTextArea (50, 5);
+        jtextareaFeedback = new JTextArea (5, 5);
+
+        jradiobuttonDineIn = new JRadioButton ("Dine In");
+        jradiobuttonTakeAway = new JRadioButton ("Take Away");
+        
+        jsliderRate = new JSlider (0, 10,6);
+
+        jpasswordfieldPinNo = new JPasswordField (5);
+        
+        jbuttonDone = new JButton ("Done");
+        jbuttonCalculateTotal = new JButton ("Calculate");
+        jbuttonNewOrder = new JButton ("New Order");
+
+        JradiobuttonCash = new JRadioButton ("Cash");
+        JradiobuttonCredit = new JRadioButton ("Credit/Debit Card");
+        
+        groupTakeAwayOrDineIn = new ButtonGroup();
+        groupCashOrCredit =new ButtonGroup();
+        
+        //set components properties
+        jsliderRate.setOrientation (JSlider.HORIZONTAL);
+        jsliderRate.setMinorTickSpacing (1);
+        jsliderRate.setMajorTickSpacing (1);
+        jsliderRate.setPaintTicks (true);
+        jsliderRate.setPaintLabels (true);
+        jsliderRate.setToolTipText ("Rate");
+
+        //adjust size and set layout
+        setPreferredSize (new Dimension (666, 538));
+        setLayout (null);
+
+        //add components
+        groupTakeAwayOrDineIn.add(jradiobuttonDineIn);
+        groupTakeAwayOrDineIn.add(jradiobuttonTakeAway);
+        groupCashOrCredit.add(JradiobuttonCash);
+        groupCashOrCredit.add(JradiobuttonCredit);
+
+        add (jcomboboxDrink);
+        add (jlabelDrink);
+        add (jlabelHeader);
+        add (jlabelFood);
+        add (jlabelDessert);
+        add (jcomboboxFoods);
+        add (jcomboboxDessert);
+        add (jtextareaOrder);
+        add (jlabelPayment);
+        add (jlabelTotalPayment);
+        add (jlabelOrder);
+        add (jsliderRate);
+        add (jlabelStatus);
+        add (jlabelFeedback);
+        add (jlabelPinNo);
+        add (jtextareaFeedback);
+        add (jradiobuttonDineIn);
+        add (jradiobuttonTakeAway);
+        add (jpasswordfieldPinNo);
+        add (jbuttonDone);
+        add (jbuttonCalculateTotal);
+        add (jbuttonNewOrder);
+        add (jlabelSubtotal);
+        add (jtextfieldSubtotal);
+        add (JradiobuttonCash);
+        add (JradiobuttonCredit);
+        add (jlabelRate);
+        add (jtextfieldTotalPayment);
+
+        //set component bounds (only needed by Absolute Positioning)
+        jcomboboxDrink.setBounds (100, 75, 100, 25);
+        jlabelDrink.setBounds (35, 75, 100, 25);
+        jlabelHeader.setBounds (260, 20, 122, 25);
+        jlabelFood.setBounds (35, 125, 100, 25);
+        jlabelDessert.setBounds (35, 175, 100, 25);
+        jlabelRate.setBounds (490, 415, 100, 25);
+        jcomboboxFoods.setBounds (100, 125, 100, 25);
+        jcomboboxDessert.setBounds (100, 175, 100, 25);
+        jtextareaOrder.setBounds (40, 260, 270, 360);
+        jlabelPayment.setBounds (470, 65, 100, 25);
+        jlabelOrder.setBounds (150, 230, 100, 25);
+        jsliderRate.setBounds (430, 450, 150, 50);
+        jlabelStatus.setBounds (280, 65, 100, 25);
+        jlabelFeedback.setBounds (470, 230, 100, 25);
+        jlabelPinNo.setBounds (470, 165, 100, 25);
+        jtextareaFeedback.setBounds (390, 260, 210, 70);
+        jradiobuttonDineIn.setBounds (255, 100, 100, 25);
+        jradiobuttonTakeAway.setBounds (255, 135, 100, 25);
+        jpasswordfieldPinNo.setBounds (445, 190, 100, 25);
+        jbuttonDone.setBounds (200, 660, 100, 25);
+        jbuttonCalculateTotal.setBounds (50, 660, 100, 25);
+        jbuttonNewOrder.setBounds (100, 45, 100, 25);
+        jlabelSubtotal.setBounds (270, 165, 100, 25);
+        jtextfieldSubtotal.setBounds (260, 190, 100, 25);
+        JradiobuttonCash.setBounds (440, 100, 100, 25);
+        JradiobuttonCredit.setBounds (440, 135, 128, 25);
+        jlabelTotalPayment.setBounds (50, 630, 120, 25);
+        jtextfieldTotalPayment.setBounds (180, 630, 120, 25);
+
+
+        jcomboboxDrink.addActionListener(cbbDrinkSelectIndexChanged);
+        jcomboboxFoods.addActionListener(cbbFoodSelectIndexChanged);
+        jcomboboxDessert.addActionListener(cbbDessertSelectIndexChanged);
+        jbuttonCalculateTotal.addActionListener(buttonCalculateClicked);
+        jbuttonDone.addActionListener(buttonDoneClicked);
+        jbuttonNewOrder.addActionListener(buttonNewOrderClicked);
+
+        jradiobuttonDineIn.setSelected(true);
+        JradiobuttonCash.setSelected(true);
+
+    }
+
+
+    public static void main (String[] args) {
+        JFrame frame = new JFrame ("MyOrderingSystem");
+        frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add (new MyOrderingSystem());
+        frame.pack();
+        frame.setVisible (true);
+        frame.setSize(700,750);
+    }
+    
+    private class CBBDrinkSelectIndexChanged implements ActionListener 
+    {
+        MyOrderingSystem MOS;
+       
+        CBBDrinkSelectIndexChanged( MyOrderingSystem mos)  
+        {  
+            this.MOS=mos;   
+        } 
+
+        public void actionPerformed(ActionEvent event) 
+        {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedDrink = (String) combo.getSelectedItem();
+ 
+            if (selectedDrink.equals("Iced Chocolate")) 
+            {
+               drinkname = "Iced Chocolate";
+               drinkprice = 3.0;
+            } else if (selectedDrink.equals("Iced Cappucino")) 
+            {
+               drinkname = "Iced Cappucino";
+               drinkprice = 4.0;
+            } else if (selectedDrink.equals("Iced Milk Tea")) 
+            {
+               drinkname = "Iced Milk Tea";
+               drinkprice = 2.5;
+            }              
+            MOS.jtextfieldSubtotal.setText(Double.toString(drinkprice + foodprice + dessertprice));   
+         }
+    }
+    
+    private class CBBFoodSelectIndexChanged implements ActionListener 
+    {
+        MyOrderingSystem MOS;
+       
+         CBBFoodSelectIndexChanged( MyOrderingSystem mos)  
+        {  
+            this.MOS=mos;   
+        } 
+
+        public void actionPerformed(ActionEvent event) 
+        {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedDrink = (String) combo.getSelectedItem();
+ 
+            if (selectedDrink.equals("Spagetti")) 
+            {
+               foodname = "Spagetti";
+               foodprice = 7.0;
+            } else if (selectedDrink.equals("Burger")) 
+            {
+               foodname = "Burger";
+               foodprice = 5.0;
+            } else if (selectedDrink.equals("Fries")) 
+            {
+               foodname = "Fries";
+               foodprice = 3.0;
+            }              
+            MOS.jtextfieldSubtotal.setText(Double.toString(drinkprice + foodprice + dessertprice));   
+         }
+    }
+
+    private class CBBDessertSelectIndexChanged implements ActionListener 
+    {
+        MyOrderingSystem MOS;
+       
+         CBBDessertSelectIndexChanged( MyOrderingSystem mos)  
+        {  
+            this.MOS=mos;   
+        } 
+         
+        public void actionPerformed(ActionEvent event) 
+        {
+            JComboBox<String> combo = (JComboBox<String>) event.getSource();
+            String selectedDrink = (String) combo.getSelectedItem();
+ 
+            if (selectedDrink.equals("Chocolate Cake")) 
+            {
+               dessertname = "Chocolate Cake";
+               dessertprice = 3.0;
+            } else if (selectedDrink.equals("Cheese Cake")) 
+            {
+               dessertname = "Cheese Cake";
+               dessertprice = 5.0;
+            } else if (selectedDrink.equals("Ice Cream")) 
+            {
+               dessertname = "Ice Cream";
+               dessertprice = 2.0;
+            }    
+            MOS.jtextfieldSubtotal.setText(Double.toString(drinkprice + foodprice + dessertprice));   
+         }
+    }
+    
+    private class ButtonCalculateClicked implements ActionListener
+    {
+         MyOrderingSystem MOS;
+       
+         ButtonCalculateClicked( MyOrderingSystem mos)  
+         {  
+             this.MOS=mos;   
+         } 
+
+          public void actionPerformed(ActionEvent event) 
+        {
+            double TotalTax = MOS.jsliderRate.getValue();
+            double PaymentPercentage = 1+ TotalTax/100;
+            double Subtotal = (drinkprice + foodprice + dessertprice);
+            double Total = PaymentPercentage* Subtotal;
+            String STRTotal = String.format("%.2f", Total);
+            if ( MOS.jradiobuttonDineIn.isSelected() == true )
+            {
+               DineInOrTakeAway = "Dine In";
+            } else if (MOS.jradiobuttonTakeAway.isSelected() == true)
+            {
+               DineInOrTakeAway = "Take Away";
+            }
+            
+             
+            if ( MOS.JradiobuttonCash.isSelected() == true )
+            {
+               PaymentType = "CASH";
+            } else if (MOS.JradiobuttonCredit.isSelected() == true)
+            {
+               PaymentType = "Credit/Debit";
+            }
+         
+            if(Subtotal != 0)
+            {
+               DateTimeFormatter dtfDate = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+               DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH:mm:ss");  
+
+               LocalDateTime now = LocalDateTime.now();  
+               jtextareaOrder.setText("");
+               jtextareaOrder.append("\n"); 
+               jtextareaOrder.append("  Kor's Simple Cafe \n");
+               jtextareaOrder.append("\n");
+               jtextareaOrder.append("  Date: "+dtfDate.format(now) +"\n");
+               jtextareaOrder.append("  Time: "+dtfTime.format(now)+"\n");
+               jtextareaOrder.append("\n");
+               jtextareaOrder.append("  Drink: "+drinkname+"\n");
+               jtextareaOrder.append("  RM: "+drinkprice+"\n");
+               jtextareaOrder.append("  Food: "+foodname+"\n");
+               jtextareaOrder.append("  RM: "+foodprice+"\n");
+               jtextareaOrder.append("  Dessert: "+dessertname+"\n");
+               jtextareaOrder.append("  RM: "+dessertprice+"\n");
+               jtextareaOrder.append("\n");
+               jtextareaOrder.append("  Payment Type: "+PaymentType+"\n");
+               jtextareaOrder.append("  Note: "+DineInOrTakeAway+"\n");
+               jtextareaOrder.append("\n"); 
+               jtextareaOrder.append("  Subtotal (RM):"+Subtotal+"\n");
+               jtextareaOrder.append("  Tax: "+TotalTax+"\n");
+               jtextareaOrder.append("  Total (RM): "+STRTotal+"\n");
+             } else if(Subtotal == 0)
+             {
+               jtextareaOrder.setText("");
+               jtextareaOrder.append("No Item Selected");
+             }
+         }
+
+    }
+     private class ButtonDoneClicked implements ActionListener
+    {
+         MyOrderingSystem MOS;
+       
+         ButtonDoneClicked( MyOrderingSystem mos)  
+         {  
+             this.MOS=mos;   
+         } 
+         
+          public void actionPerformed(ActionEvent event) 
+        {
+            double TotalPayment = Double.parseDouble(MOS.jtextfieldTotalPayment.getText());
+            double TotalTax = MOS.jsliderRate.getValue();
+            double PaymentPercentage = 1+ TotalTax/100;
+            double Subtotal = (drinkprice + foodprice + dessertprice);
+            double Total = PaymentPercentage* Subtotal;
+            double Balance = TotalPayment - Total;
+            String STRBalance = String.format("%.2f", Balance);
+           if(TotalPayment != 0 && TotalPayment >=Total)
+           {
+             jtextareaOrder.append("  Payment (RM):"+TotalPayment+"\n");
+             jtextareaOrder.append("  Balance (RM): "+STRBalance+"\n");
+             jtextareaOrder.append("  THANK YOU !");
+           }
+          
+        }
+
+     }
+     
+      private class ButtonNewOrderClicked implements ActionListener
+    {
+         MyOrderingSystem MOS;
+       
+         ButtonNewOrderClicked( MyOrderingSystem mos)  
+         {  
+             this.MOS=mos;   
+         } 
+         
+          public void actionPerformed(ActionEvent event) 
+        {
+             jcomboboxDrink.setSelectedItem("[Select]");      
+             jcomboboxFoods.setSelectedItem("[Select]");      
+             jcomboboxDessert.setSelectedItem("[Select]"); 
+             drinkprice = 0;
+             foodprice = 0;
+             dessertprice = 0;
+             drinkname = "Not Selected";
+             foodname = "Not Selected";
+             dessertname = "Not Selected";
+             PaymentType = "Not Selected";
+             DineInOrTakeAway = "Not Selected";
+             jtextfieldTotalPayment.setText("");
+             jtextareaOrder.setText("");    
+             jtextareaFeedback.setText("");    
+             jpasswordfieldPinNo.setText("");    
+             jtextfieldSubtotal.setText("");                  
+        }
+
+     } 
+}
